@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Portfolio of Mayank Kumar Singh — web development enthusiast and 12th student.">
+<title>Mayank Kumar Singh | Web Development Enthusiast</title>
+
+<style>
+/* ============================================================
+   Design Tokens & Reset
+============================================================ */
+:root {
+    --primary: #6366f1;
+    --primary-2: #8b5cf6;
+    --accent: #22d3ee;
+    --dark: #0f172a;
+    --dark-2: #1e293b;
+    --text: #334155;
+    --muted: #64748b;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 40px rgba(99, 102, 241, 0.18);
+    --grad: linear-gradient(135deg, var(--primary), var(--primary-2));
+    --grad-accent: linear-gradient(135deg, #6366f1, #22d3ee);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 { color: var(--dark); line-height: 1.3; }
+
+img { max-width: 100%; }
+
+::selection { background: var(--primary); color: #fff; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+    background: var(--grad);
+    border-radius: 6px;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ============================================================
+   Header / Navigation (glassmorphism)
+============================================================ */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 16px 0;
+    transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
+}
+
+.site-header.scrolled {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+    padding: 10px 0;
+}
+
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--grad);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 17px;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+    transition: color 0.35s ease;
+}
+
+.scrolled .brand-name { color: var(--dark); }
+
+.brand-role {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    transition: color 0.35s ease;
+}
+
+.scrolled .brand-role { color: var(--muted); }
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.main-nav a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.25s ease, background 0.25s ease;
+}
+
+.scrolled .main-nav a { color: var(--text); }
+
+.main-nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.15); }
+.scrolled .main-nav a:hover { color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+
+.main-nav a.active {
+    color: #fff;
+    background: var(--grad);
+}
+
+.scrolled .main-nav a.active { color: #fff; }
+
+/* Hamburger (mobile) */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 110;
+}
+
+.nav-toggle span {
+    width: 24px;
+    height: 2.5px;
+    background: #fff;
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+
+.scrolled .nav-toggle span { background: var(--dark); }
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* ============================================================
+   Hero (dark gradient + floating orbs)
+============================================================ */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 140px 24px 100px;
+    background: var(--dark);
+    overflow: hidden;
+}
+
+.hero::before,
+.hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+    pointer-events: none;
+    animation: float 9s ease-in-out infinite alternate;
+}
+
+.hero::before {
+    width: 480px; height: 480px;
+    background: var(--primary-2);
+    top: -140px; left: -120px;
+}
+
+.hero::after {
+    width: 420px; height: 420px;
+    background: var(--accent);
+    bottom: -120px; right: -120px;
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 50px) scale(1.12); }
+}
+
+.hero-inner { position: relative; z-index: 2; max-width: 760px; }
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #c7d2fe;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 26px;
+}
+
+.hero-badge .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.25);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.25); }
+    50%      { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0.05); }
+}
+
+.hero h1 {
+    color: #fff;
+    font-size: clamp(38px, 7vw, 62px);
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.hero h1 span {
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero .tagline {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: #94a3b8;
+    margin-bottom: 22px;
+    font-weight: 500;
+}
+
+.hero p {
+    color: #cbd5e1;
+    max-width: 640px;
+    margin: 0 auto 12px;
+}
+
+/* Typewriter cursor */
+.typing::after {
+    content: "|";
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+
+/* Scroll-down hint */
+.scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #94a3b8;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+.scroll-hint span {
+    display: block;
+    width: 22px; height: 34px;
+    margin: 10px auto 0;
+    border: 2px solid rgba(148, 163, 184, 0.5);
+    border-radius: 12px;
+    position: relative;
+}
+
+.scroll-hint span::after {
+    content: "";
+    position: absolute;
+    top: 7px; left: 50%;
+    width: 4px; height: 8px;
+    margin-left: -2px;
+    border-radius: 3px;
+    background: #fff;
+    animation: scrollDot 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollDot {
+    0%   { transform: translateY(0); opacity: 1; }
+    70%  { transform: translateY(10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 0; }
+}
+
+/* ============================================================
+   Buttons
+============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--grad);
+    color: #fff;
+    padding: 14px 32px;
+    text-decoration: none;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14.5px;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    box-shadow: 0 8px 22px rgba(99, 102, 241, 0.35);
+}
+
+.btn:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(99, 102, 241, 0.45); }
+.btn:active { transform: translateY(-1px); }
+
+.btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+.btn-solid {
+    background: var(--grad);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(99, 102, 241, 0.35);
+}
+
+.btn-solid:hover { color: #fff; }
+
+/* ============================================================
+   Sections
+============================================================ */
+.section { padding: 100px 24px; text-align: center; }
+
+.section-alt {
+    background-color: var(--white);
+}
+
+.section-header { max-width: 640px; margin: 0 auto 56px; }
+
+.section-tag {
+    display: inline-block;
+    color: var(--primary);
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section h2 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.section h2 .highlight {
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section .subtitle { color: var(--muted); font-size: 16px; }
+
+/* ============================================================
+   Cards
+============================================================ */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 26px;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
+.card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
+.card:hover::before { transform: scaleX(1); }
+
+.card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+.card h3 { margin-bottom: 14px; font-size: 19px; font-weight: 700; }
+
+.card ul { list-style: none; }
+
+.card ul li {
+    padding: 6px 0 6px 26px;
+    position: relative;
+}
+
+.card ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+
+.card p { color: var(--muted); font-size: 15px; }
+
+/* ============================================================
+   Process steps
+============================================================ */
+.step-number {
+    width: 58px; height: 58px;
+    border-radius: 16px;
+    background: var(--grad);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* ============================================================
+   Skills (animated progress bars)
+============================================================ */
+.skills-grid {
+    max-width: 760px;
+    margin: 0 auto;
+    display: grid;
+    gap: 26px;
+    text-align: left;
+}
+
+.skill {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.skill-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.skill-name { font-weight: 700; color: var(--dark); font-size: 15.5px; }
+
+.skill-level {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+}
+
+.skill-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: #eef2f7;
+    overflow: hidden;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: var(--grad-accent);
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   Contact
+============================================================ */
+.contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 34px;
+    align-items: start;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.contact-card {
+    background: var(--dark);
+    color: #cbd5e1;
+    border-radius: var(--radius);
+    padding: 38px 34px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-card::after {
+    content: "";
+    position: absolute;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: var(--primary-2);
+    filter: blur(80px);
+    opacity: 0.4;
+    top: -100px; right: -100px;
+    pointer-events: none;
+}
+
+.contact-card h3 { color: #fff; margin-bottom: 10px; font-size: 22px; position: relative; z-index: 1; }
+.contact-card > p { position: relative; z-index: 1; font-size: 15px; }
+
+.contact-items { margin-top: 30px; display: grid; gap: 18px; position: relative; z-index: 1; }
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 13px 16px;
+    text-decoration: none;
+    color: #e2e8f0;
+    font-size: 14.5px;
+    transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.contact-item:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(4px); border-color: rgba(255, 255, 255, 0.25); }
+
+.contact-item .ci-icon {
+    width: 38px; height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--grad);
+    display: grid;
+    place-items: center;
+    font-size: 17px;
+}
+
+.contact-item small { display: block; color: #94a3b8; font-size: 11.5px; text-transform: uppercase; letter-spacing: 1.5px; }
+
+.contact-form {
+    background: var(--white);
+    padding: 36px 32px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.form-group { margin-bottom: 18px; }
+
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 13.5px;
+    margin-bottom: 7px;
+    color: var(--dark);
+}
+
+input, textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f8fafc;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+input.invalid, textarea.invalid { border-color: #ef4444; }
+
+.form-status {
+    min-height: 22px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.form-status.error { color: #ef4444; }
+.form-status.success { color: #10b981; }
+
+textarea { height: 140px; resize: vertical; }
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%, 140%);
+    background: var(--dark);
+    color: #fff;
+    padding: 15px 26px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.3);
+    z-index: 200;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toast.show { transform: translate(-50%, 0); }
+
+.toast .t-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #10b981;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+}
+
+/* ============================================================
+   Footer
+============================================================ */
+.site-footer {
+    background: var(--dark);
+    color: #94a3b8;
+    text-align: center;
+    padding: 48px 24px 34px;
+}
+
+.footer-motto {
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 14px;
+}
+
+.footer-divider {
+    width: 70px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--grad);
+    margin: 0 auto 18px;
+    border: none;
+}
+
+.copyright { color: #cbd5e1; font-weight: 600; font-size: 14.5px; }
+.copyright span { color: var(--primary-2); font-size: 17px; }
+
+/* ============================================================
+   Back to top
+============================================================ */
+.back-to-top {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: var(--grad);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    z-index: 90;
+}
+
+.back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.back-to-top:hover { transform: translateY(-4px); }
+
+/* ============================================================
+   Scroll reveal animations
+============================================================ */
+.reveal {
+    opacity: 0;
+    transform: translateY(34px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Stagger delays for grids */
+.grid .reveal:nth-child(2) { transition-delay: 0.12s; }
+.grid .reveal:nth-child(3) { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, .hero::before, .hero::after { transition: none; animation: none; opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   Responsive
+============================================================ */
+@media (max-width: 860px) {
+    .contact-wrap { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+    .main-nav {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.97);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.35s ease, visibility 0.35s;
+    }
+
+    .main-nav.open { opacity: 1; visibility: visible; }
+
+    .main-nav a { font-size: 19px; padding: 12px 26px; }
+    .main-nav a, .scrolled .main-nav a { color: #fff; }
+    .main-nav a.active { background: rgba(255, 255, 255, 0.12); }
+
+    .nav-toggle { display: flex; }
+
+    .scrolled .nav-toggle span { background: #fff; }
+    .nav-toggle.open span { background: #fff !important; }
+    .brand-name, .scrolled .brand-name { color: #fff; }
+    .brand-role, .scrolled .brand-role { color: rgba(255, 255, 255, 0.75); }
+    .site-header.scrolled { background: transparent; backdrop-filter: none; box-shadow: none; }
+    .site-header.scrolled.mobile-active { background: transparent; }
+
+    .section { padding: 72px 22px; }
+
+    .scroll-hint { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<header class="site-header" id="siteHeader">
+    <div class="container">
+        <a class="brand" href="#home">
+            <span class="brand-logo">M</span>
+            <span>
+                <span class="brand-name">Mayank Kumar Singh</span>
+                <span class="brand-role">Web Development Enthusiast</span>
+            </span>
+        </a>
+
+        <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#process">Process</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="home">
+        <div class="hero-inner">
+            <div class="hero-badge"><span class="dot"></span> Available for opportunities</div>
+
+            <h1>Hello, I'm <span>Mayank Kumar Singh</span></h1>
+            <p class="tagline"><span id="typed" class="typing"></span></p>
+
+            <p>
+                I am a passionate learner who enjoys technology, programming, and building
+                websites. I continuously improve my technical skills through practical,
+                hands-on projects.
+            </p>
+            <p>
+                My goal is to develop creative and useful websites while learning new
+                technologies along the way.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#about" class="btn">Explore More ↓</a>
+                <a href="#contact" class="btn btn-outline">Get in Touch</a>
+            </div>
+        </div>
+
+        <div class="scroll-hint">Scroll<span></span></div>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Who I Am</span>
+                <h2>About <span class="highlight">Me</span></h2>
+                <p class="subtitle">A quick look at what I do and what drives me.</p>
+            </div>
+
+            <div class="grid">
+                <div class="card reveal">
+                    <div class="card-icon">⚡</div>
+                    <h3>My Activities</h3>
+                    <ul>
+                        <li>Learning web development</li>
+                        <li>Practicing programming daily</li>
+                        <li>Building HTML &amp; CSS projects</li>
+                        <li>Exploring new technologies</li>
+                        <li>Improving communication skills</li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <div class="card-icon">🎯</div>
+                    <h3>My Interests</h3>
+                    <ul>
+                        <li>Web development</li>
+                        <li>Programming</li>
+                        <li>Emerging technology</li>
+                        <li>Problem solving</li>
+                        <li>Creative projects</li>
+                    </ul>
+                </div> 
+
+                <div class="card reveal">
+                    <div class="card-icon">🎓</div>
+                    <h3>Education</h3>
+                    <ul>
+                        <li><strong>Class 12th</strong></li>
+                        <li>Currently pursuing</li>
+                        <li>Focus: Web technologies &amp; programming</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Process ===== -->
+    <section class="section section-alt" id="process">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Workflow</span>
+                <h2>How I <span class="highlight">Work</span></h2>
+                <p class="subtitle">A simple, consistent approach to growth.</p>
+            </div>
+
+            <div class="grid">
+                <div class="card reveal">
+                    <div class="step-number">01</div>
+                    <h3>Learn</h3>
+                    <p>Explore new concepts and technologies with curiosity and discipline.</p>
+                </div>
+
+                <div class="card reveal">
+                    <div class="step-number">02</div>
+                    <h3>Create</h3>
+                    <p>Turn learning into real projects and practical websites.</p>
+                </div>
+
+                <div class="card reveal">
+                    <div class="step-number">03</div>
+                    <h3>Improve</h3>
+                    <p>Refine skills through feedback, practice, and iteration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Skills ===== -->
+    <section class="section" id="skills">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Expertise</span>
+                <h2>Technical <span class="highlight">Skills</span></h2>
+                <p class="subtitle">Current proficiency levels in my learning journey.</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill reveal" data-level="85">
+                    <div class="skill-head">
+                        <span class="skill-name">HTML</span>
+                        <span class="skill-level">Good</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+
+                <div class="skill reveal" data-level="60">
+                    <div class="skill-head">
+                        <span class="skill-name">CSS</span>
+                        <span class="skill-level">Learning</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+
+                <div class="skill reveal" data-level="50">
+                    <div class="skill-head">
+                        <span class="skill-name">Java</span>
+                        <span class="skill-level">Learning</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+
+                <div class="skill reveal" data-level="45">
+                    <div class="skill-head">
+                        <span class="skill-name">Python</span>
+                        <span class="skill-level">Learning</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+
+                <div class="skill reveal" data-level="40">
+                    <div class="skill-head">
+                        <span class="skill-name">MySQL</span>
+                        <span class="skill-level">Learning</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+
+                <div class="skill reveal" data-level="35">
+                    <div class="skill-head">
+                        <span class="skill-name">Data Structures</span>
+                        <span class="skill-level">Learning</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="section section-alt" id="contact">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Say Hello</span>
+                <h2>Contact <span class="highlight">Me</span></h2>
+                <p class="subtitle">I'd be happy to connect — send me a message anytime.</p>
+            </div>
+
+            <div class="contact-wrap">
+                <aside class="contact-card reveal">
+                    <h3>Get in Touch</h3>
+                    <p>Feel free to reach out for collaboration, questions, or just to say hello — I usually reply quickly.</p>
+
+                    <div class="contact-items">
+                        <div class="contact-item">
+                            <span class="ci-icon">👤</span>
+                            <span><small>Name</small>Mayank Kumar Singh</span>
+                        </div>
+                        <a class="contact-item" href="mailto:badshahgaming421@gmail.com">
+                            <span class="ci-icon">✉️</span>
+                            <span><small>Email</small>badshahgaming421@gmail.com</span>
+                        </a>
+                        <a class="contact-item" href="tel:+919455140347">
+                            <span class="ci-icon">📞</span>
+                            <span><small>Phone</small>+91 94551 40347</span>
+                        </a>
+                    </div>
+                </aside>
+
+                <form class="contact-form reveal" id="contactForm" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required placeholder="you@example.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What is this about?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+                    </div>
+
+                    <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+
+                    <button type="submit" class="btn">Send Message ✈</button>
+                    <button type="reset" class="btn btn-solid" style="box-shadow:none;background:transparent;color:var(--text);border:2px solid var(--border);">Clear</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+    <p class="footer-motto">Learning &bull; Creating &bull; Improving</p>
+    <hr class="footer-divider">
+    <p class="copyright">&copy; 2026 Mayank Kumar Singh. All rights reserved. <span>♥</span></p>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="t-icon">✓</span><span id="toastMsg">Message sent!</span></div>
+
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script>
+(function () {
+    "use strict";
+
+    /* ---------- Header: scrolled state + shadow ---------- */
+    var header = document.getElementById("siteHeader");
+    var backToTop = document.getElementById("backToTop");
+
+    function onScroll() {
+        header.classList.toggle("scrolled", window.scrollY > 40);
+        backToTop.classList.toggle("visible", window.scrollY > 500);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    backToTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    /* ---------- Mobile menu toggle ---------- */
+    var navToggle = document.getElementById("navToggle");
+    var mainNav = document.getElementById("mainNav");
+
+    function closeMenu() {
+        mainNav.classList.remove("open");
+        navToggle.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+    }
+
+    navToggle.addEventListener("click", function () {
+        var open = mainNav.classList.toggle("open");
+        navToggle.classList.toggle("open", open);
+        navToggle.setAttribute("aria-expanded", String(open));
+        document.body.style.overflow = open ? "hidden" : "";
+    });
+
+    mainNav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeMenu);
+    });
+
+    /* ---------- Smooth scroll (offset for fixed header) ---------- */
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener("click", function (e) {
+            var id = anchor.getAttribute("href");
+            if (id === "#" || id === "!") return;
+            var target = document.querySelector(id);
+            if (!target) return;
+            e.preventDefault();
+            window.scrollTo({
+                top: target.getBoundingClientRect().top + window.scrollY - 70,
+                behavior: "smooth"
+            });
+        });
+    });
+
+    /* ---------- Scrollspy (active nav link) ---------- */
+    var sections = ["home", "about", "process", "skills", "contact"].map(function (id) {
+        return document.getElementById(id);
+    });
+    var navLinks = Array.prototype.slice.call(mainNav.querySelectorAll("a"));
+
+    window.addEventListener("scroll", function () {
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function (sec) {
+            if (sec && sec.offsetTop <= pos) current = sec;
+        });
+        navLinks.forEach(function (link) {
+            link.classList.toggle("active", link.getAttribute("href") === "#" + current.id);
+        });
+    }, { passive: true });
+
+    /* ---------- Scroll reveal animations ---------- */
+    var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach(function (el) {
+        revealObserver.observe(el);
+    });
+
+    /* ---------- Animated skill bars on scroll ---------- */
+    var skillObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                var fill = entry.target.querySelector(".skill-bar-fill");
+                fill.style.width = entry.target.dataset.level + "%";
+                skillObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll(".skill").forEach(function (el) {
+        skillObserver.observe(el);
+    });
+
+    /* ---------- Typewriter effect (hero) ---------- */
+    var phrases = [
+        "12th Student",
+        "Aspiring Web Developer",
+        "Programming Enthusiast",
+        "Lifelong Learner"
+    ];
+    var typedEl = document.getElementById("typed");
+    var pi = 0, ci = 0, deleting = false;
+
+    function type() {
+        var word = phrases[pi];
+        typedEl.textContent = word.slice(0, ci);
+
+        if (!deleting && ci < word.length) {
+            ci++;
+            setTimeout(type, 90);
+        } else if (!deleting) {
+            deleting = true;
+            setTimeout(type, 1800);  // pause on full word
+        } else if (ci > 0) {
+            ci--;
+            setTimeout(type, 40);
+        } else {
+            deleting = false;
+            pi = (pi + 1) % phrases.length;
+            setTimeout(type, 400);
+        }
+    }
+    type();
+
+    /* ---------- Contact form: validation + toast ---------- */
+    var form = document.getElementById("contactForm");
+    var status = document.getElementById("formStatus");
+    var toast = document.getElementById("toast");
+    var toastMsg = document.getElementById("toastMsg");
+
+    function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(function () { toast.classList.remove("show"); }, 3200);
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var name = form.elements["name"];
+        var email = form.elements["email"];
+        var message = form.elements["message"];
+        var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var ok = true;
+
+        [name, email, message].forEach(function (field) {
+            field.classList.remove("invalid");
+        });
+        status.className = "form-status";
+        status.textContent = "";
+
+        if (name.value.trim().length < 2) {
+            name.classList.add("invalid"); ok = false;
+        }
+        if (!emailRe.test(email.value.trim())) {
+            email.classList.add("invalid"); ok = false;
+        }
+        if (message.value.trim().length < 10) {
+            message.classList.add("invalid"); ok = false;
+        }
+
+        if (!ok) {
+            status.textContent = "Please fill in all fields correctly (message ≥ 10 characters).";
+            status.classList.add("error");
+            return;
+        }
+
+        // Simulated send (connect to a backend / Formspree later)
+        status.textContent = "";
+        showToast("Thanks " + name.value.trim().split(" ")[0] + "! Your message has been sent.");
+        form.reset();
+    });
+
+    form.addEventListener("reset", function () {
+        [form.elements["name"], form.elements["email"], form.elements["message"]].forEach(function (field) {
+            field.classList.remove("invalid");
+        });
+        status.className = "form-status";
+        status.textContent = "";
+    });
+})();
+</script>
+
+</body>
+</html>
